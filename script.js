@@ -236,17 +236,22 @@ function calculateTimeDelta(targetTimestamp, createdAt) {
   const totalDuration = targetTimestamp - start;
   const elapsed = Math.max(0, now - start);
 
-  let progress = 0;
+  let progressFloat = 0;
   if (totalDuration > 0) {
-    progress = Math.min(
+    progressFloat = Math.min(
       100,
-      Math.max(0, Math.round((elapsed / totalDuration) * 100)),
+      Math.max(0, (elapsed / totalDuration) * 100),
     );
   }
-  if (isCompleted) progress = 100;
+  if (isCompleted) progressFloat = 100;
 
-  const elapsedDays = Math.floor(elapsed / 86400000);
-  const elapsedHours = Math.floor((elapsed % 86400000) / 3600000);
+  const remainingPercentFloat = Math.max(0, 100 - progressFloat);
+
+  const elapsedSecondsTotal = Math.floor(elapsed / 1000);
+  const elapsedDays = Math.floor(elapsedSecondsTotal / 86400);
+  const elapsedHours = Math.floor((elapsedSecondsTotal % 86400) / 3600);
+  const elapsedMinutes = Math.floor((elapsedSecondsTotal % 3600) / 60);
+  const elapsedSeconds = elapsedSecondsTotal % 60;
 
   return {
     isCompleted,
@@ -254,10 +259,15 @@ function calculateTimeDelta(targetTimestamp, createdAt) {
     hours,
     minutes,
     seconds,
-    progress,
+    progress: Math.round(progressFloat),
+    progressFloat,
+    remainingPercent: Math.round(remainingPercentFloat),
+    remainingPercentFloat,
     remainingSeconds,
     elapsedDays,
     elapsedHours,
+    elapsedMinutes,
+    elapsedSeconds,
   };
 }
 
@@ -273,20 +283,20 @@ function tickCountdown() {
   dom.heroHours.textContent = pad2(delta.hours);
   dom.heroMinutes.textContent = pad2(delta.minutes);
   dom.heroSeconds.textContent = pad2(delta.seconds);
-  const barWidth = delta.isCompleted ? 100 : (delta.progress > 0 ? delta.progress : 2);
-  dom.heroProgressBar.style.width = `${barWidth}%`;
-  dom.heroProgressPercent.textContent = `${delta.progress}%`;
+  const fillWidth = delta.isCompleted ? 100 : Math.max(0.5, delta.progressFloat);
+  dom.heroProgressBar.style.width = `${fillWidth.toFixed(2)}%`;
+  dom.heroProgressPercent.textContent = `${delta.progressFloat.toFixed(1)}%`;
 
   // Showcase Elements
   dom.mainDays.textContent = pad2(delta.days);
   dom.mainHours.textContent = pad2(delta.hours);
   dom.mainMinutes.textContent = pad2(delta.minutes);
   dom.mainSeconds.textContent = pad2(delta.seconds);
-  dom.mainProgressBar.style.width = `${barWidth}%`;
-  dom.progressPercentLabel.textContent = `${delta.progress}%`;
-  dom.progressRemainingLabel.textContent = `Remaining: ${delta.days}d ${delta.hours}h ${delta.minutes}m`;
+  dom.mainProgressBar.style.width = `${fillWidth.toFixed(2)}%`;
+  dom.progressPercentLabel.innerHTML = `<span class="text-[var(--color-accent)] font-bold">${delta.progressFloat.toFixed(1)}%</span> <span class="text-xs text-[var(--color-text-secondary)] font-normal">(${delta.remainingPercentFloat.toFixed(1)}% remaining)</span>`;
+  dom.progressRemainingLabel.textContent = `Remaining: ${delta.days}d ${delta.hours}h ${delta.minutes}m ${delta.seconds}s`;
   if (dom.progressElapsedLabel) {
-    dom.progressElapsedLabel.textContent = `Elapsed: ${delta.elapsedDays}d ${delta.elapsedHours}h`;
+    dom.progressElapsedLabel.textContent = `Elapsed: ${delta.elapsedDays}d ${delta.elapsedHours}h ${delta.elapsedMinutes}m ${delta.elapsedSeconds}s`;
   }
 
   // Focus Mode Elements
@@ -399,12 +409,12 @@ function renderEventsDashboard() {
           <div class="space-y-1 my-1.5">
             <div class="w-full h-1.5 rounded-full bg-[var(--color-surface-elevated)] overflow-hidden">
               <div class="h-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-secondary)] rounded-full transition-all duration-300 shadow-sm"
-                   style="width: ${delta.progress}%"></div>
+                   style="width: ${delta.progressFloat.toFixed(2)}%"></div>
             </div>
           </div>
 
           <div class="pt-2 border-t border-[var(--color-border)] flex items-center justify-between">
-            <span class="text-xs text-[var(--color-text-secondary)] font-medium">${delta.isCompleted ? "Completed" : delta.progress + "% elapsed"}</span>
+            <span class="text-xs text-[var(--color-text-secondary)] font-medium">${delta.isCompleted ? "Completed" : `${delta.progressFloat.toFixed(1)}% (${delta.remainingPercentFloat.toFixed(1)}% left)`}</span>
             <button class="select-event-btn px-3 py-1.5 rounded-lg text-xs font-semibold ${
               isSelected
                 ? "bg-[var(--color-accent)] text-white"
