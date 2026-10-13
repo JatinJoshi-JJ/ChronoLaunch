@@ -1,0 +1,1455 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>
+    ChronoLaunch — Smart Countdown Timer & Event Planning Dashboard
+  </title>
+  <meta name="description"
+    content="ChronoLaunch is a modern, high-precision event countdown dashboard featuring Gemini-powered AI roadmaps, intelligent planning milestones, and seamless scheduling." />
+
+  <!-- Inter, Space Grotesk, and JetBrains Mono Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN for utility architecture -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lenis Smooth Scrolling Library -->
+  <script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
+  <!-- Lucide Icons Library -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="min-h-screen flex flex-col antialiased selection:bg-purple-600 selection:text-white">
+  <!-- Top Navigation Header -->
+  <header
+    class="sticky top-0 z-40 glass-panel border-b border-[var(--color-border)] px-4 sm:px-8 py-3.5 transition-colors">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+      <!-- Logo Branding -->
+      <a href="#hero"
+        class="flex items-center gap-3 group focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] rounded-lg p-1">
+        <div
+          class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-indigo-900/30">
+          <i data-lucide="timer" class="w-5 h-5"></i>
+        </div>
+        <div class="flex flex-col">
+          <span
+            class="font-heading font-bold text-lg tracking-tight leading-none group-hover:text-[var(--color-accent)] transition-colors">ChronoLaunch</span>
+          <span class="text-[11px] text-[var(--color-text-secondary)] font-medium tracking-wide uppercase mt-1">Smart
+            Time Engine</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links -->
+      <nav class="hidden md:flex items-center gap-7 text-sm font-medium text-[var(--color-text-secondary)]">
+        <a href="#countdown-showcase" class="hover:text-[var(--color-text-primary)] transition-colors">Showcase</a>
+        <a href="#events-dashboard" class="hover:text-[var(--color-text-primary)] transition-colors">My Events</a>
+        <a href="#templates" class="hover:text-[var(--color-text-primary)] transition-colors">Templates</a>
+        <a href="#ai-assistant"
+          class="flex items-center gap-1.5 text-[var(--color-accent)] hover:opacity-80 transition-opacity">
+          <i data-lucide="sparkles" class="w-4 h-4"></i>
+          <span>Gemini AI</span>
+        </a>
+        <a href="#faq" class="hover:text-[var(--color-text-primary)] transition-colors">FAQ</a>
+      </nav>
+
+      <!-- Action Cluster -->
+      <div class="flex items-center gap-3">
+        <!-- AI Settings Trigger -->
+        <button id="aiConfigBtn" title="Gemini API Configuration"
+          class="p-2.5 rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+          <i data-lucide="key" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Theme Toggle Switch -->
+        <button id="themeToggleBtn" aria-label="Toggle visual theme"
+          class="p-2.5 rounded-xl border border-[var(--color-border)] hover:bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]">
+          <i id="themeIcon" data-lucide="sun" class="w-4 h-4"></i>
+        </button>
+
+        <!-- Create Countdown CTA -->
+        <a href="#create-section"
+          class="hidden sm:inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold bg-[var(--color-accent)] hover:opacity-90 text-white shadow-sm transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[var(--color-accent)]">
+          <i data-lucide="plus" class="w-4 h-4"></i>
+          <span>New Event</span>
+        </a>
+
+        <!-- Mobile Drawer Menu Button -->
+        <button id="mobileMenuBtn" aria-label="Open navigation menu"
+          class="md:hidden p-2 rounded-xl border border-[var(--color-border)] text-[var(--color-text-secondary)]">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile Drawer Menu -->
+    <div id="mobileDrawer" class="hidden md:hidden pt-4 pb-3 border-t border-[var(--color-border)] mt-3 flex-col gap-3">
+      <a href="#countdown-showcase"
+        class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-[var(--color-surface-elevated)] block">Showcase</a>
+      <a href="#events-dashboard"
+        class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-[var(--color-surface-elevated)] block">My Events</a>
+      <a href="#templates"
+        class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-[var(--color-surface-elevated)] block">Templates</a>
+      <a href="#ai-assistant"
+        class="px-3 py-2 rounded-lg text-sm font-medium text-[var(--color-accent)] hover:bg-[var(--color-surface-elevated)] block">Gemini
+        AI Assistant</a>
+      <a href="#faq"
+        class="px-3 py-2 rounded-lg text-sm font-medium hover:bg-[var(--color-surface-elevated)] block">FAQ</a>
+      <a href="#create-section"
+        class="mt-2 w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-sm font-semibold bg-[var(--color-accent)] text-white">Create
+        Countdown</a>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+    <!-- Hero Section -->
+    <section id="hero"
+      class="relative pt-6 sm:pt-12 pb-6 text-center lg:text-left flex flex-col lg:flex-row items-center gap-12">
+      <div class="flex-1 space-y-6">
+        <div
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-500/10 text-[var(--color-accent)] border border-purple-500/20">
+          <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+          <span>Next-Generation Milestone Engine</span>
+        </div>
+
+        <h1 class="font-heading text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.12]">
+          Every second closer to something
+          <span
+            class="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-indigo-500 to-sky-500">extraordinary.</span>
+        </h1>
+
+        <p class="text-base sm:text-lg text-[var(--color-text-secondary)] max-w-2xl leading-relaxed">
+          Transform ordinary calendar deadlines into cinematic countdown
+          experiences. Plan milestones with Google Gemini AI intelligence,
+          track granular progress, and preserve every memory with offline
+          privacy.
+        </p>
+
+        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-3.5 pt-2">
+          <a href="#create-section"
+            class="px-6 py-3.5 rounded-xl font-semibold text-white bg-[var(--color-accent)] hover:opacity-90 shadow-md shadow-purple-900/20 flex items-center gap-2 text-sm transition-transform active:scale-95">
+            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+            <span>Create Your Countdown</span>
+          </a>
+          <a href="#ai-assistant"
+            class="px-6 py-3.5 rounded-xl font-semibold border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-elevated)] text-[var(--color-text-primary)] flex items-center gap-2 text-sm transition-colors">
+            <i data-lucide="sparkles" class="w-4 h-4 text-purple-400"></i>
+            <span>Gemini AI Assistant</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Hero Interactive Card Preview -->
+      <div class="w-full lg:w-[480px]">
+        <div
+          class="p-6 sm:p-7 rounded-2xl glass-panel shadow-xl border border-[var(--color-border)] space-y-5 relative overflow-hidden">
+          <div class="absolute -top-12 -right-12 w-36 h-36 bg-purple-500/10 rounded-full blur-2xl pointer-events-none">
+          </div>
+
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span id="heroCardCategoryBadge"
+                class="px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-500/15 text-[var(--color-accent)]">🚀
+                Launch</span>
+              <span class="text-xs text-[var(--color-text-secondary)]" id="heroCardTimezone">UTC</span>
+            </div>
+            <div class="flex items-center gap-1.5 text-xs text-emerald-500 font-medium">
+              <span class="w-2 h-2 rounded-full bg-emerald-500 animate-ping"></span>
+              <span>Active</span>
+            </div>
+          </div>
+
+          <div>
+            <h3 id="heroCardTitle" class="font-heading text-xl sm:text-2xl font-bold truncate">
+              Product Launch 2.0
+            </h3>
+            <p id="heroCardDate" class="text-xs sm:text-sm text-[var(--color-text-secondary)] mt-1">
+              December 31, 2026 • 23:59:59
+            </p>
+          </div>
+
+          <!-- Hero Mini Digit Array -->
+          <div class="grid grid-cols-4 gap-2.5 text-center">
+            <div class="p-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+              <span id="heroDays"
+                class="font-mono-timer text-2xl font-bold block text-[var(--color-text-primary)]">00</span>
+              <span class="text-[10px] uppercase font-semibold text-[var(--color-text-secondary)]">Days</span>
+            </div>
+            <div class="p-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+              <span id="heroHours"
+                class="font-mono-timer text-2xl font-bold block text-[var(--color-text-primary)]">00</span>
+              <span class="text-[10px] uppercase font-semibold text-[var(--color-text-secondary)]">Hours</span>
+            </div>
+            <div class="p-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+              <span id="heroMinutes"
+                class="font-mono-timer text-2xl font-bold block text-[var(--color-text-primary)]">00</span>
+              <span class="text-[10px] uppercase font-semibold text-[var(--color-text-secondary)]">Mins</span>
+            </div>
+            <div class="p-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+              <span id="heroSeconds"
+                class="font-mono-timer text-2xl font-bold block text-[var(--color-accent)]">00</span>
+              <span class="text-[10px] uppercase font-semibold text-[var(--color-text-secondary)]">Secs</span>
+            </div>
+          </div>
+
+          <!-- Mini Progress Bar -->
+          <div class="space-y-1.5 pt-1">
+            <div class="flex justify-between text-xs text-[var(--color-text-secondary)]">
+              <span>Timeline Progress</span>
+              <span id="heroProgressPercent">0%</span>
+            </div>
+            <div class="w-full h-2 rounded-full bg-[var(--color-surface-elevated)] overflow-hidden">
+              <div id="heroProgressBar"
+                class="h-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-secondary)] rounded-full transition-all duration-500 shadow-sm"
+                style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 2: Live Countdown Showcase -->
+    <section id="countdown-showcase" class="scroll-mt-24 space-y-6">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
+        <div>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+            Live Countdown Showcase
+          </h2>
+          <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+            High-precision wall-clock countdown for the currently selected
+            event.
+          </p>
+        </div>
+
+        <!-- Display Mode Controls -->
+        <div class="flex items-center gap-2 self-start sm:self-auto">
+          <button id="modeStandardBtn"
+            class="px-3 py-1.5 text-xs font-semibold rounded-lg bg-[var(--color-accent)] text-white">
+            Standard
+          </button>
+          <button id="modeCompactBtn"
+            class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+            Compact
+          </button>
+          <button id="modeFocusBtn"
+            class="px-3 py-1.5 text-xs font-semibold rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center gap-1">
+            <i data-lucide="maximize" class="w-3.5 h-3.5"></i>
+            <span>Focus Mode</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Main Showcase Container -->
+      <div id="mainShowcaseCard"
+        class="p-6 sm:p-10 rounded-3xl glass-panel border border-[var(--color-border)] shadow-xl relative overflow-hidden transition-all">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8">
+          <div class="space-y-2">
+            <div class="flex items-center gap-3">
+              <span id="activeEventCategory"
+                class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/15 text-[var(--color-accent)]">Category</span>
+              <span id="activeEventStatusBadge"
+                class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">Counting
+                Down</span>
+            </div>
+            <h3 id="activeEventTitle" class="font-heading text-2xl sm:text-4xl font-extrabold tracking-tight">
+              Select an Event
+            </h3>
+            <p id="activeEventMeta" class="text-sm text-[var(--color-text-secondary)]">
+              Target: Calculating timestamp...
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <!-- AI Roadmap Button for the Active Event -->
+            <button id="generateAiRoadmapBtn"
+              class="px-4 py-2.5 rounded-xl font-semibold text-xs sm:text-sm bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-95 text-white flex items-center gap-2 shadow-sm transition-transform active:scale-95">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+              <span>Generate AI Roadmap</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Big Countdown Clock Grid -->
+        <div id="countdownGrid" class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 my-8">
+          <!-- Days -->
+          <div
+            class="p-5 sm:p-7 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-center relative overflow-hidden group">
+            <span id="mainDays"
+              class="font-mono-timer text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight block text-[var(--color-text-primary)]">00</span>
+            <span
+              class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[var(--color-text-secondary)] mt-2 block">Days</span>
+          </div>
+
+          <!-- Hours -->
+          <div
+            class="p-5 sm:p-7 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-center relative overflow-hidden group">
+            <span id="mainHours"
+              class="font-mono-timer text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight block text-[var(--color-text-primary)]">00</span>
+            <span
+              class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[var(--color-text-secondary)] mt-2 block">Hours</span>
+          </div>
+
+          <!-- Minutes -->
+          <div
+            class="p-5 sm:p-7 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-center relative overflow-hidden group">
+            <span id="mainMinutes"
+              class="font-mono-timer text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight block text-[var(--color-text-primary)]">00</span>
+            <span
+              class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[var(--color-text-secondary)] mt-2 block">Minutes</span>
+          </div>
+
+          <!-- Seconds -->
+          <div
+            class="p-5 sm:p-7 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-center relative overflow-hidden group">
+            <span id="mainSeconds"
+              class="font-mono-timer text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight block text-[var(--color-accent)]">00</span>
+            <span
+              class="text-xs sm:text-sm font-semibold uppercase tracking-wider text-[var(--color-text-secondary)] mt-2 block">Seconds</span>
+          </div>
+        </div>
+
+        <!-- Target Achieved Banner -->
+        <div id="targetAchievedBanner"
+          class="hidden p-6 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center my-6 space-y-2">
+          <div
+            class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center">
+            <i data-lucide="check-circle-2" class="w-6 h-6"></i>
+          </div>
+          <h4 class="font-heading text-xl font-bold text-emerald-500">
+            The Moment Has Arrived!
+          </h4>
+          <p class="text-sm text-[var(--color-text-secondary)]">
+            This countdown has completed. You can archive it or configure a
+            new milestone below.
+          </p>
+        </div>
+
+        <!-- Detailed Progress & Time Elapsed Bar -->
+        <div class="space-y-2 pt-4">
+          <div class="flex justify-between text-xs sm:text-sm font-medium text-[var(--color-text-secondary)]">
+            <span id="progressElapsedLabel">Elapsed: 0 days</span>
+            <span id="progressRemainingLabel">Remaining: calculating...</span>
+            <span id="progressPercentLabel" class="font-mono-timer font-bold text-[var(--color-text-primary)]">0%</span>
+          </div>
+          <div
+            class="w-full h-3 rounded-full bg-[var(--color-surface-elevated)] overflow-hidden p-0.5 border border-[var(--color-border)]">
+            <div id="mainProgressBar"
+              class="h-full bg-gradient-to-r from-[var(--color-accent)] to-[var(--color-accent-secondary)] rounded-full transition-all duration-300 shadow-sm"
+              style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Create Your Countdown Form -->
+    <section id="create-section" class="scroll-mt-24 space-y-6">
+      <div class="border-b border-[var(--color-border)] pb-4">
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+          Create New Countdown
+        </h2>
+        <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+          Configure your milestone parameters with precise dates and local
+          timezone controls.
+        </p>
+      </div>
+
+      <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-[var(--color-border)] shadow-lg">
+        <form id="createEventForm" class="space-y-6" novalidate>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Event Title -->
+            <div class="space-y-2">
+              <label for="eventTitleInput"
+                class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Event Title
+                <span class="text-red-500">*</span></label>
+              <input type="text" id="eventTitleInput" placeholder="e.g. Master's Degree Defense"
+                class="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all" />
+              <p id="titleError" class="text-xs text-red-400 hidden">
+                Please provide an event title.
+              </p>
+            </div>
+
+            <!-- Event Category -->
+            <div class="space-y-2">
+              <label for="eventCategorySelect"
+                class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Milestone
+                Category</label>
+              <select id="eventCategorySelect"
+                class="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all">
+                <option value="Product Launch">🚀 Product Launch</option>
+                <option value="Birthday">🎂 Birthday Celebration</option>
+                <option value="Examination">📝 Examination / Test</option>
+                <option value="Project Deadline">💼 Project Deadline</option>
+                <option value="Vacation">🏖️ Vacation / Travel</option>
+                <option value="Wedding">💍 Wedding / Anniversary</option>
+                <option value="Festival">🎉 Festival / Holiday</option>
+                <option value="Personal Goal">🎯 Personal Milestone</option>
+              </select>
+            </div>
+
+            <!-- Target Date -->
+            <div class="space-y-2">
+              <label for="eventDateInput"
+                class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Target Date
+                <span class="text-red-500">*</span></label>
+              <input type="date" id="eventDateInput"
+                class="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all" />
+              <p id="dateError" class="text-xs text-red-400 hidden">
+                Please select a valid future date.
+              </p>
+            </div>
+
+            <!-- Target Time & Timezone -->
+            <div class="grid grid-cols-2 gap-3">
+              <div class="space-y-2">
+                <label for="eventTimeInput"
+                  class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Target
+                  Time <span class="text-red-500">*</span></label>
+                <input type="time" id="eventTimeInput" value="12:00"
+                  class="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all" />
+              </div>
+              <div class="space-y-2">
+                <label for="eventTimezoneSelect"
+                  class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Timezone</label>
+                <select id="eventTimezoneSelect"
+                  class="w-full px-3 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-xs focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all">
+                  <option value="UTC">UTC (Universal)</option>
+                  <option value="America/New_York">New York (EST/EDT)</option>
+                  <option value="Europe/London">London (GMT/BST)</option>
+                  <option value="Europe/Paris">Paris (CET)</option>
+                  <option value="Asia/Kolkata">India (IST)</option>
+                  <option value="Asia/Tokyo">Tokyo (JST)</option>
+                  <option value="Australia/Sydney">Sydney (AEST)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Description / Notes -->
+          <div class="space-y-2">
+            <label for="eventDescInput"
+              class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Brief
+              Description (Optional)</label>
+            <textarea id="eventDescInput" rows="2" placeholder="Key goals, deliverables, or checklist details..."
+              class="w-full px-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] transition-all resize-none"></textarea>
+          </div>
+
+          <!-- Form Actions -->
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button type="reset"
+              class="px-5 py-2.5 rounded-xl text-sm font-semibold border border-[var(--color-border)] hover:bg-[var(--color-surface-elevated)] transition-colors">
+              Reset
+            </button>
+            <button type="submit"
+              class="px-6 py-2.5 rounded-xl text-sm font-semibold bg-[var(--color-accent)] hover:opacity-90 text-white shadow-md transition-all flex items-center gap-2">
+              <i data-lucide="check" class="w-4 h-4"></i>
+              <span>Save & Launch Timer</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Section 4: Gemini AI Event Co-Pilot & Assistant -->
+    <section id="ai-assistant" class="scroll-mt-24 space-y-6">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
+        <div>
+          <div
+            class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-1">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Google Gemini Powered</span>
+          </div>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+            AI Event Planning Assistant
+          </h2>
+          <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+            Use natural language or voice to parse schedules, synthesize
+            milestones, and auto-build roadmaps.
+          </p>
+        </div>
+
+        <button id="openAiKeySettings"
+          class="self-start sm:self-auto px-3.5 py-2 rounded-xl text-xs font-semibold border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-elevated)] text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] flex items-center gap-2">
+          <i data-lucide="settings-2" class="w-4 h-4 text-purple-400"></i>
+          <span>Gemini Model Settings</span>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-[var(--color-border)] space-y-6">
+        <div class="space-y-3">
+          <label class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">Describe
+            your event in plain words</label>
+          <div class="relative">
+            <input type="text" id="aiPromptInput"
+              placeholder="e.g., Final semester dissertation submission on November 25 at 4 PM with checkpoints"
+              class="w-full pl-4 pr-24 py-3.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]" />
+            <div class="absolute right-2 top-2 flex items-center gap-1">
+              <!-- Speech Recognition Trigger -->
+              <button id="voiceInputBtn" title="Speak via Microphone"
+                class="p-2 rounded-lg text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:bg-[var(--color-surface-elevated)] transition-colors">
+                <i data-lucide="mic" class="w-4 h-4"></i>
+              </button>
+              <!-- Submit AI Request -->
+              <button id="runAiAssistantBtn"
+                class="px-3 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-accent)] text-white hover:opacity-90 flex items-center gap-1">
+                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+                <span>Interpret</span>
+              </button>
+            </div>
+          </div>
+          <p class="text-xs text-[var(--color-text-secondary)]">
+            Try: "Product launch on next Friday at 10 AM", "Mom's birthday in
+            14 days", or "Tokyo vacation on Dec 10".
+          </p>
+        </div>
+
+        <!-- AI Assistant Result Card -->
+        <div id="aiResultCard"
+          class="hidden p-5 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] space-y-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></span>
+              <span class="text-xs font-bold uppercase tracking-wider text-purple-400">AI Synthesized Event</span>
+            </div>
+            <button id="aiApplyEventBtn"
+              class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-purple-600 text-white hover:bg-purple-700 flex items-center gap-1.5 shadow-sm">
+              <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i>
+              <span>Create This Countdown</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+              <span class="text-xs text-[var(--color-text-secondary)] block">Title</span>
+              <span id="aiParsedTitle" class="font-bold text-sm block">--</span>
+            </div>
+            <div>
+              <span class="text-xs text-[var(--color-text-secondary)] block">Target Schedule</span>
+              <span id="aiParsedSchedule" class="font-bold text-sm block">--</span>
+            </div>
+            <div>
+              <span class="text-xs text-[var(--color-text-secondary)] block">Inferred Category</span>
+              <span id="aiParsedCategory" class="font-bold text-sm block">--</span>
+            </div>
+          </div>
+
+          <div id="aiBriefingBox"
+            class="p-3.5 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            <!-- Strategic briefing generated by Gemini -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 5: My Events Dashboard -->
+    <section id="events-dashboard" class="scroll-mt-24 space-y-6">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
+        <div>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+            My Events Dashboard
+          </h2>
+          <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+            Manage your stored countdowns, mark favorites, and switch active
+            timers.
+          </p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div
+          class="flex items-center gap-1.5 p-1 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-xs font-medium self-start sm:self-auto">
+          <button data-filter="all" class="dashboard-filter px-3 py-1.5 rounded-lg bg-[var(--color-accent)] text-white">
+            All (<span id="countAll">0</span>)
+          </button>
+          <button data-filter="active"
+            class="dashboard-filter px-3 py-1.5 rounded-lg text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+            Active (<span id="countActive">0</span>)
+          </button>
+          <button data-filter="completed"
+            class="dashboard-filter px-3 py-1.5 rounded-lg text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+            Completed (<span id="countCompleted">0</span>)
+          </button>
+          <button data-filter="favorites"
+            class="dashboard-filter px-3 py-1.5 rounded-lg text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+            Starred (<span id="countFavs">0</span>)
+          </button>
+        </div>
+      </div>
+
+      <!-- Events Grid Container -->
+      <div id="eventsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+      <!-- Empty State -->
+      <div id="emptyEventsState"
+        class="hidden p-12 text-center rounded-3xl glass-panel border border-[var(--color-border)] space-y-4">
+        <div
+          class="w-14 h-14 rounded-2xl bg-purple-500/10 text-[var(--color-accent)] mx-auto flex items-center justify-center">
+          <i data-lucide="calendar" class="w-7 h-7"></i>
+        </div>
+        <h3 class="font-heading text-lg font-bold">No Milestones Found</h3>
+        <p class="text-sm text-[var(--color-text-secondary)] max-w-sm mx-auto">
+          Create a countdown using the form or select one of the instant
+          templates below.
+        </p>
+        <a href="#create-section"
+          class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold bg-[var(--color-accent)] text-white">
+          <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+          <span>Create Event</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Section 6: Event Categories & Quick Templates -->
+    <section id="templates" class="scroll-mt-24 space-y-6">
+      <div class="border-b border-[var(--color-border)] pb-4">
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+          Instant Event Templates
+        </h2>
+        <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+          Kickstart your timer with preconfigured categories and realistic
+          milestone offsets.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5">
+        <!-- Template 1: Product Launch -->
+        <button data-template-title="Q4 Product Launch" data-template-cat="Product Launch" data-template-days="14"
+          class="template-card p-4 rounded-2xl glass-panel border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left space-y-2 group transition-all">
+          <div class="text-2xl">🚀</div>
+          <h4 class="font-bold text-xs group-hover:text-[var(--color-accent)] transition-colors">
+            Product Launch
+          </h4>
+          <span class="text-[11px] text-[var(--color-text-secondary)] block">+14 Days</span>
+        </button>
+
+        <!-- Template 2: Birthday -->
+        <button data-template-title="Birthday Celebration" data-template-cat="Birthday" data-template-days="30"
+          class="template-card p-4 rounded-2xl glass-panel border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left space-y-2 group transition-all">
+          <div class="text-2xl">🎂</div>
+          <h4 class="font-bold text-xs group-hover:text-[var(--color-accent)] transition-colors">
+            Birthday Bash
+          </h4>
+          <span class="text-[11px] text-[var(--color-text-secondary)] block">+30 Days</span>
+        </button>
+
+        <!-- Template 3: Exam -->
+        <button data-template-title="Final Certification Exam" data-template-cat="Examination" data-template-days="21"
+          class="template-card p-4 rounded-2xl glass-panel border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left space-y-2 group transition-all">
+          <div class="text-2xl">📝</div>
+          <h4 class="font-bold text-xs group-hover:text-[var(--color-accent)] transition-colors">
+            Board Exam
+          </h4>
+          <span class="text-[11px] text-[var(--color-text-secondary)] block">+21 Days</span>
+        </button>
+
+        <!-- Template 4: Vacation -->
+        <button data-template-title="Summer Island Vacation" data-template-cat="Vacation" data-template-days="45"
+          class="template-card p-4 rounded-2xl glass-panel border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left space-y-2 group transition-all">
+          <div class="text-2xl">🏖️</div>
+          <h4 class="font-bold text-xs group-hover:text-[var(--color-accent)] transition-colors">
+            Tropical Trip
+          </h4>
+          <span class="text-[11px] text-[var(--color-text-secondary)] block">+45 Days</span>
+        </button>
+
+        <!-- Template 5: Project Deadline -->
+        <button data-template-title="Project Alpha Release" data-template-cat="Project Deadline" data-template-days="7"
+          class="template-card p-4 rounded-2xl glass-panel border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left space-y-2 group transition-all">
+          <div class="text-2xl">💼</div>
+          <h4 class="font-bold text-xs group-hover:text-[var(--color-accent)] transition-colors">
+            Sprint Deadline
+          </h4>
+          <span class="text-[11px] text-[var(--color-text-secondary)] block">+7 Days</span>
+        </button>
+
+        <!-- Template 6: Wedding -->
+        <button data-template-title="Wedding Ceremony" data-template-cat="Wedding" data-template-days="90"
+          class="template-card p-4 rounded-2xl glass-panel border border-[var(--color-border)] hover:border-[var(--color-accent)] text-left space-y-2 group transition-all">
+          <div class="text-2xl">💍</div>
+          <h4 class="font-bold text-xs group-hover:text-[var(--color-accent)] transition-colors">
+            Wedding Day
+          </h4>
+          <span class="text-[11px] text-[var(--color-text-secondary)] block">+90 Days</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Section 7: AI Roadmap & Milestones Display -->
+    <section id="ai-roadmap-section" class="scroll-mt-24 space-y-6">
+      <div
+        class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--color-border)] pb-4">
+        <div>
+          <div
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-500/10 text-purple-400 border border-purple-500/20 mb-1">
+            <i data-lucide="list-checks" class="w-3.5 h-3.5"></i>
+            <span>Interactive Prep Stages</span>
+          </div>
+          <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+            Countdown Milestones & T-Minus Roadmap
+          </h2>
+          <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+            Phased preparation roadmap generated for
+            <span id="roadmapEventName" class="font-semibold text-[var(--color-text-primary)]">Current Event</span>.
+          </p>
+        </div>
+
+        <button id="refreshRoadmapBtn"
+          class="self-start sm:self-auto px-3.5 py-2 rounded-xl text-xs font-semibold border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-elevated)] flex items-center gap-2 transition-colors">
+          <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+          <span>Regenerate Roadmap</span>
+        </button>
+      </div>
+
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-[var(--color-border)] space-y-6">
+        <!-- Milestone Checkpoint Items -->
+        <div id="roadmapMilestonesList" class="space-y-3">
+          <!-- Populated by JavaScript -->
+        </div>
+
+        <div
+          class="pt-4 border-t border-[var(--color-border)] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-[var(--color-text-secondary)]">
+          <div class="flex items-center gap-2">
+            <i data-lucide="shield-check" class="w-4 h-4 text-emerald-500"></i>
+            <span>Progress automatically preserved in local device storage.</span>
+          </div>
+          <span id="roadmapCompletionRate" class="font-mono-timer font-semibold text-[var(--color-text-primary)]">0 of 0
+            Completed</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 8: Smart Reminders Center -->
+    <section id="reminders" class="scroll-mt-24 space-y-6">
+      <div class="border-b border-[var(--color-border)] pb-4">
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+          Smart Reminder Alerts
+        </h2>
+        <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+          Configure browser notification triggers at strategic countdown
+          milestones.
+        </p>
+      </div>
+
+      <div
+        class="p-6 sm:p-8 rounded-3xl glass-panel border border-[var(--color-border)] grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+        <div class="space-y-4">
+          <div class="space-y-1">
+            <h4 class="font-bold text-base">Browser Push Notifications</h4>
+            <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+              Receive browser alerts when countdown intervals trigger (24h
+              prior, 1h prior, 15m prior, and at moment of completion).
+            </p>
+          </div>
+
+          <div class="flex items-center gap-3">
+            <button id="requestNotificationBtn"
+              class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-[var(--color-accent)] text-white hover:opacity-90 flex items-center gap-2 transition-transform active:scale-95">
+              <i data-lucide="bell" class="w-4 h-4"></i>
+              <span>Enable Browser Alerts</span>
+            </button>
+            <span id="notificationStatusBadge" class="text-xs text-[var(--color-text-secondary)]">Status:
+              Inactive</span>
+          </div>
+        </div>
+
+        <div class="space-y-2.5 p-4 rounded-2xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)]">
+          <label
+            class="flex items-center justify-between text-xs font-medium cursor-pointer p-1.5 hover:bg-[var(--color-surface)] rounded-lg transition-colors">
+            <span>24 Hours Remaining</span>
+            <input type="checkbox" id="remind24h" checked
+              class="rounded text-purple-600 focus:ring-purple-500 w-4 h-4" />
+          </label>
+          <label
+            class="flex items-center justify-between text-xs font-medium cursor-pointer p-1.5 hover:bg-[var(--color-surface)] rounded-lg transition-colors">
+            <span>1 Hour Remaining</span>
+            <input type="checkbox" id="remind1h" checked
+              class="rounded text-purple-600 focus:ring-purple-500 w-4 h-4" />
+          </label>
+          <label
+            class="flex items-center justify-between text-xs font-medium cursor-pointer p-1.5 hover:bg-[var(--color-surface)] rounded-lg transition-colors">
+            <span>15 Minutes Remaining</span>
+            <input type="checkbox" id="remind15m" checked
+              class="rounded text-purple-600 focus:ring-purple-500 w-4 h-4" />
+          </label>
+          <label
+            class="flex items-center justify-between text-xs font-medium cursor-pointer p-1.5 hover:bg-[var(--color-surface)] rounded-lg transition-colors">
+            <span>Launch Moment (T-0)</span>
+            <input type="checkbox" id="remind0" checked class="rounded text-purple-600 focus:ring-purple-500 w-4 h-4" />
+          </label>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 9: Feature Highlights Grid -->
+    <section class="space-y-6">
+      <div class="border-b border-[var(--color-border)] pb-4 text-center max-w-xl mx-auto">
+        <h2 class="font-heading text-2xl sm:text-3xl font-bold">
+          Engineered for Precision
+        </h2>
+        <p class="text-sm text-[var(--color-text-secondary)] mt-0.5">
+          Built on modern web primitives without heavy bloat or privacy
+          intrusion.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="p-5 rounded-2xl glass-panel border border-[var(--color-border)] space-y-2.5">
+          <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center">
+            <i data-lucide="cpu" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-sm">Drift-Free Wall Clock</h4>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Calculates timestamp delta on every frame rather than decrementing
+            counters, preventing background tab drift.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl glass-panel border border-[var(--color-border)] space-y-2.5">
+          <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 flex items-center justify-center">
+            <i data-lucide="sparkles" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-sm">Gemini AI Synthesis</h4>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Extracts event schedules from natural language expressions and
+            structures actionable preparation milestones.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl glass-panel border border-[var(--color-border)] space-y-2.5">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
+            <i data-lucide="lock" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-sm">Offline First Privacy</h4>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            All countdowns and milestones live entirely in your browser's
+            LocalStorage. No server telemetry.
+          </p>
+        </div>
+
+        <div class="p-5 rounded-2xl glass-panel border border-[var(--color-border)] space-y-2.5">
+          <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center">
+            <i data-lucide="globe" class="w-5 h-5"></i>
+          </div>
+          <h4 class="font-bold text-sm">Timezone Adaptive</h4>
+          <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+            Full Intl.DateTimeFormat support across world zones, accounting
+            for daylight saving boundaries.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Frequently Asked Questions -->
+    <section id="faq" class="scroll-mt-24 space-y-8">
+      <!-- Centered Section Header -->
+      <div class="text-center max-w-2xl mx-auto space-y-3">
+        <div
+          class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-purple-500/10 text-[var(--color-accent)] border border-purple-500/20">
+          <i data-lucide="help-circle" class="w-3.5 h-3.5"></i>
+          <span>Help & Knowledge Base</span>
+        </div>
+        <h2 class="font-heading text-3xl sm:text-4xl font-extrabold tracking-tight">
+          Frequently Asked Questions
+        </h2>
+        <p class="text-sm sm:text-base text-[var(--color-text-secondary)] leading-relaxed">
+          Everything you need to know about ChronoLaunch architecture, precision wall-clock engine, Gemini AI intelligence, and privacy.
+        </p>
+      </div>
+
+      <!-- Centered FAQ Search & Filter Controls -->
+      <div class="max-w-3xl mx-auto space-y-3">
+        <div class="relative">
+          <i data-lucide="search"
+            class="w-4 h-4 text-[var(--color-text-secondary)] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+          <input type="text" id="faqSearchInput"
+            placeholder="Search questions (e.g. accuracy, offline, Gemini, timezones, notifications)..."
+            class="w-full pl-10 pr-4 py-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)] text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]/70 transition-all shadow-sm" />
+        </div>
+
+        <!-- Filter category pills -->
+        <div class="flex items-center justify-center flex-wrap gap-2 text-xs">
+          <button data-category="all"
+            class="faq-filter-btn px-3.5 py-1.5 rounded-lg font-semibold transition-all bg-[var(--color-accent)] text-white shadow-sm">
+            All Questions (<span id="faqCountAll">10</span>)
+          </button>
+          <button data-category="precision"
+            class="faq-filter-btn px-3.5 py-1.5 rounded-lg font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-elevated)] border border-transparent hover:border-[var(--color-border)] transition-all">
+            Precision & Engine
+          </button>
+          <button data-category="ai"
+            class="faq-filter-btn px-3.5 py-1.5 rounded-lg font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-elevated)] border border-transparent hover:border-[var(--color-border)] transition-all">
+            Gemini AI
+          </button>
+          <button data-category="privacy"
+            class="faq-filter-btn px-3.5 py-1.5 rounded-lg font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-elevated)] border border-transparent hover:border-[var(--color-border)] transition-all">
+            Privacy & Storage
+          </button>
+          <button data-category="features"
+            class="faq-filter-btn px-3.5 py-1.5 rounded-lg font-semibold text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-elevated)] border border-transparent hover:border-[var(--color-border)] transition-all">
+            Alerts & Features
+          </button>
+        </div>
+      </div>
+
+      <!-- Centered FAQ Accordion List -->
+      <div id="faqList" class="space-y-3.5 max-w-3xl mx-auto">
+        <!-- Q1 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="privacy" data-keywords="saved refresh close tab storage persistence localstorage">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-emerald-500/20">01</span>
+              <span>Will my countdowns remain saved if I refresh or close the tab?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              <strong class="text-[var(--color-text-primary)]">Yes, completely.</strong> All timers, event metadata, custom milestone checklists, favorite stars, and UI preferences are securely persisted in your browser's local sandbox via standard <code
+                class="px-1.5 py-0.5 rounded bg-[var(--color-surface-elevated)] font-mono text-xs text-[var(--color-accent)]">localStorage</code>.
+            </p>
+            <p>
+              Your data stays preserved across browser restarts, tab closures, and computer reboots without requiring any login, registration, or third-party cookies.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q2 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="precision" data-keywords="accuracy drift sleep background tab epoch wall-clock milliseconds">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-purple-500/10 text-[var(--color-accent)] flex items-center justify-center flex-shrink-0 text-xs font-bold border border-purple-500/20">02</span>
+              <span>How does ChronoLaunch guarantee drift-free timer accuracy when tabs sleep?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              Traditional countdown widgets decrement a local JavaScript counter once every 1,000 milliseconds. When tabs go into background throttle mode, operating systems delay these intervals, accumulating significant clock drift over hours.
+            </p>
+            <p>
+              ChronoLaunch bypasses this issue entirely by computing the true mathematical delta between the system epoch time (<code
+                class="px-1.5 py-0.5 rounded bg-[var(--color-surface-elevated)] font-mono text-xs text-[var(--color-accent)]">Date.now()</code>) and your target timestamp on each animation tick. The calculation is 100% immune to tab sleeping or background suspension.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q3 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="ai" data-keywords="gemini ai nlp api key google ai studio voice speech roadmap">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-sky-500/10 text-sky-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-sky-500/20">03</span>
+              <span>How does the Gemini AI Assistant work, and is an API key mandatory?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              <strong class="text-[var(--color-text-primary)]">An API key is completely optional!</strong> ChronoLaunch operates in a hybrid dual-mode setup:
+            </p>
+            <ul class="list-disc list-inside space-y-1 pl-1">
+              <li><strong class="text-[var(--color-text-primary)]">Zero-Config Mode:</strong> A built-in offline heuristic natural language parser parses conversational phrases (e.g. <em>"Project launch in 14 days at 4 PM"</em>) instantly without network requests.</li>
+              <li><strong class="text-[var(--color-text-primary)]">Gemini Cloud Mode:</strong> Adding your free Google AI Studio API key activates deep multimodal semantic analysis and comprehensive preparation briefings. Your key is stored solely on your local device.</li>
+            </ul>
+          </div>
+        </details>
+
+        <!-- Q4 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="features" data-keywords="notifications alerts browser push reminder sound t-0">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-amber-500/20">04</span>
+              <span>How do browser notifications and milestone alerts work?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              ChronoLaunch leverages the standard W3C <strong class="text-[var(--color-text-primary)]">Web Notifications API</strong>. When enabled in the Reminders Center, background checks dispatch native OS alerts at key threshold milestones:
+            </p>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 font-mono text-xs">
+              <div class="p-2.5 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-center font-semibold">T-Minus 24h</div>
+              <div class="p-2.5 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-center font-semibold">T-Minus 1h</div>
+              <div class="p-2.5 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-center font-semibold">T-Minus 15m</div>
+              <div class="p-2.5 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-center font-semibold text-emerald-400">T-0 Launch!</div>
+            </div>
+          </div>
+        </details>
+
+        <!-- Q5 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="features" data-keywords="timezone dst utc est ist cet jst daylight saving international">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-indigo-500/10 text-indigo-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-indigo-500/20">05</span>
+              <span>Can I schedule events across international timezones and daylight saving?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              <strong class="text-[var(--color-text-primary)]">Yes.</strong> You can pick your target timezone directly in the event creation form (UTC, New York EST/EDT, London GMT/BST, Paris CET, India IST, Tokyo JST, Sydney AEST).
+            </p>
+            <p>
+              The engine automatically maps the selected zone to absolute UTC time while intelligently accounting for daylight saving shifts, ensuring all participants sync to the exact same second regardless of geographic location.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q6 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="features" data-keywords="focus mode fullscreen cinema streaming presentation stage">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-rose-500/10 text-rose-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-rose-500/20">06</span>
+              <span>What is Focus Mode and when should I use it?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              Focus Mode transforms the dashboard into an ultra-clean, cinema-grade fullscreen countdown view. It strips away navigation bars, dashboard side panels, and form controls, displaying only high-impact oversized typography and dynamic pulse lighting.
+            </p>
+            <p>
+              It is ideal for live stream overlays (OBS/Twitch), boardroom presentation screens, stage keynotes, and focused pomodoro sessions. Press the <strong class="text-[var(--color-text-primary)]">Focus Mode</strong> button or hit the <kbd
+                class="px-2 py-0.5 rounded bg-[var(--color-surface-elevated)] text-xs border border-[var(--color-border)] font-mono">ESC</kbd> key anytime to exit.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q7 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="ai" data-keywords="roadmap milestones checklist checkpoints progress stages">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-cyan-500/20">07</span>
+              <span>How are countdown milestones and roadmaps structured?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              Whenever an event is activated, ChronoLaunch calculates dynamic readiness checkpoints proportional to your remaining timeline:
+            </p>
+            <ul class="list-disc list-inside space-y-1 pl-1">
+              <li><strong class="text-[var(--color-text-primary)]">Kickoff & Research:</strong> Foundational preparation and milestone scoping.</li>
+              <li><strong class="text-[var(--color-text-primary)]">Halfway Progress Check:</strong> Core deliverables and timeline validation.</li>
+              <li><strong class="text-[var(--color-text-primary)]">Final Rehearsal (T-24h):</strong> Final dry-run and resource verification.</li>
+              <li><strong class="text-[var(--color-text-primary)]">Zero Hour Execution:</strong> Launch moment checklist.</li>
+            </ul>
+            <p>You can interactively check off stages and the system automatically calculates your completion percentage.</p>
+          </div>
+        </details>
+
+        <!-- Q8 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="privacy" data-keywords="offline internet pwa connection cache">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-emerald-500/20">08</span>
+              <span>Does ChronoLaunch work without an active internet connection?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              <strong class="text-[var(--color-text-primary)]">Yes, 100%.</strong> ChronoLaunch is designed from the ground up on modern offline web standards. All timer loops, local storage reads/writes, voice recognition APIs, and offline NLP parsing run directly in your local browser sandbox.
+            </p>
+            <p>
+              You can run ChronoLaunch in offline field environments, airplane mode, or unstable mobile networks without missing a beat.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q9 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="features" data-keywords="multiple events dashboard favorites active limit">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-blue-500/20">09</span>
+              <span>How many events can I store and manage simultaneously?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              There is no arbitrary limit. You can maintain dozens of concurrent countdowns across categories like Product Launches, Examinations, Birthdays, Vacation Trips, and Deadlines.
+            </p>
+            <p>
+              Use the dashboard filter tabs (<em class="text-[var(--color-text-primary)]">All, Active, Completed, Starred</em>) to quickly organize your milestones, and click any card's "Set as Active" button to promote it to the main showcase.
+            </p>
+          </div>
+        </details>
+
+        <!-- Q10 -->
+        <details class="faq-item p-4 sm:p-5 rounded-2xl glass-panel border border-[var(--color-border)] group transition-all"
+          data-category="privacy" data-keywords="privacy security telemetry tracker cookies server">
+          <summary
+            class="font-semibold text-sm sm:text-base cursor-pointer list-none flex justify-between items-center text-[var(--color-text-primary)] gap-4">
+            <div class="flex items-center gap-3">
+              <span
+                class="w-7 h-7 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center flex-shrink-0 text-xs font-bold border border-teal-500/20">10</span>
+              <span>Does ChronoLaunch track my events or sell telemetry data?</span>
+            </div>
+            <i data-lucide="chevron-down"
+              class="w-4 h-4 text-[var(--color-text-secondary)] group-open:rotate-180 transition-transform flex-shrink-0"></i>
+          </summary>
+          <div
+            class="pt-3.5 mt-2 border-t border-[var(--color-border)]/60 text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed space-y-2">
+            <p>
+              <strong class="text-[var(--color-text-primary)]">Never.</strong> ChronoLaunch includes zero third-party trackers, zero advertising scripts, and zero analytical cookies. Your countdown details never touch an external database.
+            </p>
+            <p>
+              When utilizing your optional Gemini API key, network requests travel directly and securely from your browser to Google Cloud via encrypted TLS, without passing through any intermediate proxy server.
+            </p>
+          </div>
+        </details>
+      </div>
+
+      <!-- Centered Support / Still Have Questions Card -->
+      <div
+        class="max-w-3xl mx-auto p-6 sm:p-8 rounded-3xl glass-panel border border-[var(--color-border)] text-center space-y-4 shadow-lg">
+        <div
+          class="w-12 h-12 rounded-2xl bg-purple-500/10 text-[var(--color-accent)] mx-auto flex items-center justify-center">
+          <i data-lucide="sparkles" class="w-6 h-6"></i>
+        </div>
+        <div class="space-y-1">
+          <h3 class="font-heading text-lg sm:text-xl font-bold text-[var(--color-text-primary)]">
+            Have a specific countdown workflow in mind?
+          </h3>
+          <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] max-w-lg mx-auto">
+            Try our instant Gemini AI event generator or pick a pre-configured template to launch your countdown in under 5 seconds.
+          </p>
+        </div>
+        <div class="flex items-center justify-center gap-3 pt-1">
+          <a href="#ai-assistant"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold bg-[var(--color-accent)] text-white hover:opacity-90 flex items-center gap-2 transition-transform active:scale-95 shadow-md">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5"></i>
+            <span>Ask Gemini Assistant</span>
+          </a>
+          <a href="#templates"
+            class="px-4 py-2.5 rounded-xl text-xs font-semibold border border-[var(--color-border)] bg-[var(--color-surface)] hover:bg-[var(--color-surface-elevated)] text-[var(--color-text-primary)] flex items-center gap-2 transition-colors">
+            <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+            <span>Browse Templates</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Enhanced Modern Footer Landmark -->
+  <footer
+    class="mt-24 border-t border-[var(--color-border)] bg-[var(--color-surface)]/85 backdrop-blur-xl relative overflow-hidden transition-colors">
+    <!-- Subtle Background Ambient Glows -->
+    <div class="absolute top-0 left-1/4 w-96 h-36 bg-purple-500/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 right-1/4 w-96 h-36 bg-sky-500/5 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12 relative z-10">
+      <!-- 4-Column Main Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
+        <!-- Col 1: Brand & Identity (spans 2 on lg) -->
+        <div class="lg:col-span-2 space-y-4">
+          <div class="flex items-center gap-3">
+            <div
+              class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-700 via-indigo-600 to-sky-500 flex items-center justify-center text-white shadow-md shadow-indigo-900/30">
+              <i data-lucide="timer" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <span
+                class="font-heading font-bold text-xl tracking-tight block text-[var(--color-text-primary)]">ChronoLaunch</span>
+              <span class="text-[11px] text-[var(--color-text-secondary)] font-medium uppercase tracking-wider">Precision Event Countdown Dashboard</span>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-[var(--color-text-secondary)] leading-relaxed max-w-sm">
+            High-precision wall-clock synchronization, intelligent milestone tracking, and autonomous AI-assisted countdown workflows. Designed for milestones that matter.
+          </p>
+
+          <!-- Live Operational Status -->
+          <div
+            class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-xs text-emerald-500 font-medium">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            <span>All Systems Operational • Drift-Free Engine</span>
+          </div>
+
+          <!-- Social Links / Community Badges -->
+          <div class="flex items-center gap-2 pt-2">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub Repository"
+              class="w-9 h-9 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-secondary)] transition-all">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"></path>
+              </svg>
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" title="Follow on Twitter / X"
+              class="w-9 h-9 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-secondary)] transition-all">
+              <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+              </svg>
+            </a>
+            <a href="#reminders" title="Reminder Alerts"
+              class="w-9 h-9 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-secondary)] transition-all">
+              <i data-lucide="bell" class="w-4 h-4"></i>
+            </a>
+            <button id="footerThemeToggleBtn" title="Toggle Theme"
+              class="w-9 h-9 rounded-xl border border-[var(--color-border)] bg-[var(--color-surface-elevated)] hover:bg-[var(--color-accent)] hover:text-white hover:border-[var(--color-accent)] flex items-center justify-center text-[var(--color-text-secondary)] transition-all">
+              <i data-lucide="sparkles" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Col 2: Navigation Links -->
+        <div class="space-y-3">
+          <h4 class="font-heading text-xs font-bold uppercase tracking-wider text-[var(--color-text-primary)]">Quick Links</h4>
+          <ul class="space-y-2 text-xs text-[var(--color-text-secondary)]">
+            <li><a href="#hero" class="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5"><i
+                  data-lucide="chevron-right" class="w-3 h-3 text-[var(--color-accent)]"></i> Overview</a></li>
+            <li><a href="#countdown-showcase"
+                class="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5"><i
+                  data-lucide="chevron-right" class="w-3 h-3 text-[var(--color-accent)]"></i> Live Showcase</a></li>
+            <li><a href="#create-section"
+                class="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5"><i
+                  data-lucide="chevron-right" class="w-3 h-3 text-[var(--color-accent)]"></i> Create Countdown</a></li>
+            <li><a href="#events-dashboard"
+                class="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5"><i
+                  data-lucide="chevron-right" class="w-3 h-3 text-[var(--color-accent)]"></i> Events Dashboard</a></li>
+            <li><a href="#templates" class="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5"><i
+                  data-lucide="chevron-right" class="w-3 h-3 text-[var(--color-accent)]"></i> Quick Templates</a></li>
+            <li><a href="#faq" class="hover:text-[var(--color-accent)] transition-colors flex items-center gap-1.5"><i
+                  data-lucide="chevron-right" class="w-3 h-3 text-[var(--color-accent)]"></i> Frequently Asked</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 3: Engine Architecture -->
+        <div class="space-y-3">
+          <h4 class="font-heading text-xs font-bold uppercase tracking-wider text-[var(--color-text-primary)]">Engine Features</h4>
+          <ul class="space-y-2 text-xs text-[var(--color-text-secondary)]">
+            <li><a href="#countdown-showcase" class="hover:text-[var(--color-accent)] transition-colors">Drift-Free Epoch Calculation</a></li>
+            <li><a href="#ai-assistant" class="hover:text-[var(--color-accent)] transition-colors">Gemini NLP Parsing Engine</a></li>
+            <li><a href="#ai-roadmap-section" class="hover:text-[var(--color-accent)] transition-colors">T-Minus Prep Roadmaps</a></li>
+            <li><a href="#reminders" class="hover:text-[var(--color-accent)] transition-colors">Web Push Browser Notifications</a></li>
+            <li><a href="#countdown-showcase" class="hover:text-[var(--color-accent)] transition-colors">Focus Fullscreen Mode</a></li>
+            <li><a href="#create-section" class="hover:text-[var(--color-accent)] transition-colors">Intl. World Timezones</a></li>
+          </ul>
+        </div>
+
+        <!-- Col 4: Privacy & Platform -->
+        <div class="space-y-3">
+          <h4 class="font-heading text-xs font-bold uppercase tracking-wider text-[var(--color-text-primary)]">Security & Policy</h4>
+          <ul class="space-y-2.5 text-xs text-[var(--color-text-secondary)]">
+            <li class="flex items-center gap-2">
+              <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-500"></i>
+              <span>100% Client-Side Sandbox</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="lock" class="w-3.5 h-3.5 text-purple-400"></i>
+              <span>Zero Server Telemetry</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="cpu" class="w-3.5 h-3.5 text-sky-400"></i>
+              <span>Offline Ready Architecture</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="key" class="w-3.5 h-3.5 text-amber-400"></i>
+              <span>Private Google Gemini Keys</span>
+            </li>
+            <li class="flex items-center gap-2">
+              <i data-lucide="smartphone" class="w-3.5 h-3.5 text-emerald-400"></i>
+              <span>Cross-Device Responsive UI</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Feature Highlight Ribbon -->
+      <div
+        class="p-5 sm:p-6 rounded-2xl glass-panel border border-[var(--color-border)] flex flex-col md:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div
+            class="w-9 h-9 rounded-xl bg-purple-500/10 text-[var(--color-accent)] flex items-center justify-center flex-shrink-0">
+            <i data-lucide="award" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h5 class="font-heading text-xs sm:text-sm font-bold text-[var(--color-text-primary)]">Precision Event Countdown Dashboard</h5>
+            <p class="text-[11px] text-[var(--color-text-secondary)]">Engineered for launch teams, academics, travelers, deadlines, and milestone planners.</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <a href="#hero"
+            class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-[var(--color-surface-elevated)] border border-[var(--color-border)] hover:border-[var(--color-accent)] text-[var(--color-text-primary)] flex items-center gap-1.5 transition-colors">
+            <i data-lucide="arrow-up" class="w-3.5 h-3.5"></i>
+            <span>Back to Top</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Bottom Bar -->
+      <div
+        class="border-t border-[var(--color-border)] pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[var(--color-text-secondary)]">
+        <div>
+          © <span id="footerYear">2026</span> ChronoLaunch. Built with precision, local privacy, and modern web standards.
+        </div>
+        <div class="flex items-center gap-5 text-xs">
+          <a href="#faq" class="hover:text-[var(--color-text-primary)] transition-colors">FAQ</a>
+          <span>•</span>
+          <a href="#reminders" class="hover:text-[var(--color-text-primary)] transition-colors">Reminders</a>
+          <span>•</span>
+          <a href="#templates" class="hover:text-[var(--color-text-primary)] transition-colors">Templates</a>
+          <span>•</span>
+          <span class="text-emerald-500 flex items-center gap-1 font-medium">
+            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            v2.4 LTS
+          </span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Focus Mode Fullscreen Overlay Modal -->
+  <div id="focusModal"
+    class="fixed inset-0 z-50 bg-black/90 backdrop-blur-xl hidden flex-col items-center justify-center p-6 text-center fade-in">
+    <button id="closeFocusModalBtn"
+      class="absolute top-6 right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors">
+      <i data-lucide="x" class="w-6 h-6"></i>
+    </button>
+
+    <div class="space-y-6 max-w-4xl w-full">
+      <div class="space-y-2">
+        <span id="focusCategoryBadge"
+          class="px-3.5 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-500/30">Category</span>
+        <h2 id="focusEventTitle" class="font-heading text-4xl sm:text-6xl font-extrabold text-white tracking-tight">
+          Focus Countdown
+        </h2>
+      </div>
+
+      <div class="grid grid-cols-4 gap-4 sm:gap-8 my-8 text-white">
+        <div class="p-6 sm:p-10 rounded-3xl bg-white/5 border border-white/10">
+          <span id="focusDays" class="font-mono-timer text-5xl sm:text-8xl font-bold block">00</span>
+          <span class="text-xs sm:text-sm font-semibold uppercase tracking-widest text-zinc-400 mt-2 block">Days</span>
+        </div>
+        <div class="p-6 sm:p-10 rounded-3xl bg-white/5 border border-white/10">
+          <span id="focusHours" class="font-mono-timer text-5xl sm:text-8xl font-bold block">00</span>
+          <span class="text-xs sm:text-sm font-semibold uppercase tracking-widest text-zinc-400 mt-2 block">Hours</span>
+        </div>
+        <div class="p-6 sm:p-10 rounded-3xl bg-white/5 border border-white/10">
+          <span id="focusMinutes" class="font-mono-timer text-5xl sm:text-8xl font-bold block">00</span>
+          <span
+            class="text-xs sm:text-sm font-semibold uppercase tracking-widest text-zinc-400 mt-2 block">Minutes</span>
+        </div>
+        <div class="p-6 sm:p-10 rounded-3xl bg-white/5 border border-white/10">
+          <span id="focusSeconds" class="font-mono-timer text-5xl sm:text-8xl font-bold block text-purple-400">00</span>
+          <span
+            class="text-xs sm:text-sm font-semibold uppercase tracking-widest text-zinc-400 mt-2 block">Seconds</span>
+        </div>
+      </div>
+
+      <p id="focusMeta" class="text-sm text-zinc-400">
+        Press ESC or the close button to exit Focus Mode
+      </p>
+    </div>
+  </div>
+
+  <!-- Gemini AI Key Configuration Modal -->
+  <div id="aiKeyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-md hidden items-center justify-center p-4">
+    <div
+      class="max-w-md w-full p-6 sm:p-7 rounded-3xl glass-panel border border-[var(--color-border)] shadow-2xl space-y-5 fade-in bg-[var(--color-surface)]">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+            <i data-lucide="key" class="w-4 h-4"></i>
+          </div>
+          <h3 class="font-heading font-bold text-lg">
+            Gemini AI Configuration
+          </h3>
+        </div>
+        <button id="closeAiKeyModalBtn"
+          class="p-1.5 rounded-lg text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <p class="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+        Provide your optional Google Gemini API key to activate natural
+        language processing. If left empty, ChronoLaunch seamlessly utilizes
+        its built-in heuristic NLP engine.
+      </p>
+
+      <div class="space-y-2">
+        <label for="geminiApiKeyInput"
+          class="block text-xs font-bold uppercase tracking-wider text-[var(--color-text-secondary)]">API Key</label>
+        <input type="password" id="geminiApiKeyInput" placeholder="AIzaSy..."
+          class="w-full px-4 py-3 rounded-xl bg-[var(--color-surface-elevated)] border border-[var(--color-border)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-accent)]" />
+      </div>
+
+      <div class="flex items-center justify-between pt-2">
+        <button id="clearAiKeyBtn" class="text-xs text-red-400 hover:underline">
+          Remove Key
+        </button>
+        <div class="flex items-center gap-2">
+          <button id="cancelAiKeyBtn"
+            class="px-4 py-2 rounded-xl text-xs font-semibold border border-[var(--color-border)]">
+            Cancel
+          </button>
+          <button id="saveAiKeyBtn"
+            class="px-4 py-2 rounded-xl text-xs font-semibold bg-[var(--color-accent)] text-white">
+            Save Key
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- In-Page Toast Container -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2 pointer-events-none"></div>
+  <script src="script.js"></script>
+</body>
+
+</html>
